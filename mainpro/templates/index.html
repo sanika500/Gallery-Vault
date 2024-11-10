@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <!-- Header Section -->
+    <header class="main-header">
+        <h1 class="header-title">Gallery Vault</h1>
+        <div class="user-actions">
+            <h3><i class="bi bi-person-circle"></i> {{ user.username }}</h3>
+            <a href="{% url 'post' %}">
+                <button class="btn add-photo-btn">Add Photo</button>
+            </a>
+            <a href="{% url 'logoutuser' %}">
+                <button class="btn logout-btn">Logout</button>
+            </a>
+        </div>
+    </header>
+
+    <!-- Gallery Section -->
+    <main class="gallery-container">
+        {% for feed in feeds %}
+        <div class="image-card">
+            <a href="{% url 'gallery.html' feed.pk %}">
+                <img src="{{image.url }}" alt="User Image" class="image">
+            </a>
+        </div>
+        {% endfor %}
+    </main>
+
+</body>
+</html>

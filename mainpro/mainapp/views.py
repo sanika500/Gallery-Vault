@@ -10,9 +10,9 @@ def index(request):
     if request.user.is_authenticated:
         feeds = Gallery.objects.filter(User=request.user).order_by('-id')
         return render(request, "index.html", {"feeds": feeds})
-    return redirect("usersignin")
+    return redirect("signin")
 
-def usersignin(request):
+def signin(request):
     if request.user.is_authenticated:
         return redirect('index')
     
@@ -47,7 +47,7 @@ def usersignup(request):
         else:
             User.objects.create_user(username=username, email=email, password=password)
             messages.success(request, "Account created successfully")
-            return redirect("usersignin")
+            return redirect("signin")
     
     return render(request, "createuser.html")
 
@@ -57,7 +57,7 @@ def addimage(request):
         if feedimage:
             Gallery.objects.create(feedimage=feedimage, User=request.user)
             return redirect("index")
-    return render(request, "newpost.html")
+    return render(request, "post.html")
 
 def view_image(request,pk):
     feeds = Gallery.objects.filter(pk=pk)
@@ -66,14 +66,27 @@ def view_image(request,pk):
     
 
 
+# def post(request):
+#     if request.method == 'POST':
+#         feedimage = request.FILES.get('feedimage')
+#         description = request.POST.get("description")
+#         if feedimage:
+#             Gallery.objects.create(feedimage=feedimage, User=request.user)
+#             return redirect("index")
+#     return render(request, "post.html")
+
 def post(request):
     if request.method == 'POST':
         feedimage = request.FILES.get('feedimage')
         description = request.POST.get("description")
         if feedimage:
-            Gallery.objects.create(feedimage=feedimage, User=request.user)
+            Gallery.objects.create(feedimage=feedimage, User=request.user, description=description)
             return redirect("index")
-    return render(request, "newpost.html")
+    return render(request, "post.html")
+
+
+
+
 
 def logoutuser(request):
     logout(request)

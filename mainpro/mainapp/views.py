@@ -75,12 +75,16 @@ def view_image(request,pk):
 #             return redirect("index")
 #     return render(request, "post.html")
 
+
+
+
+
 def post(request):
     if request.method == 'POST':
         feedimage = request.FILES.get('feedimage')
         description = request.POST.get("description")
         if feedimage:
-            Gallery.objects.create(feedimage=feedimage, User=request.user, description=description)
+            Gallery.objects.create(feedimage=feedimage, User=request.user,description=description)
             return redirect("index")
     return render(request, "post.html")
 
@@ -96,4 +100,12 @@ def delete_image(request,pk):
     feeds = Gallery.objects.filter(pk=pk)
     feeds.delete()
     return redirect("index")
+
+
+
+def image(request):
+  
+    galleries = Gallery.objects.all()
     
+    # Return the galleries to a template
+    return render(request, "image.html", {"image": image})

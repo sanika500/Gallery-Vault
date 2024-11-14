@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -23,6 +23,7 @@ def signin(request):
         
         if user is not None:
             login(request, user)
+            request.session['username']=username
             return redirect('index')
         else:
             messages.error(request, "Invalid credentials")
@@ -84,7 +85,7 @@ def post(request):
         feedimage = request.FILES.get('feedimage')
         description = request.POST.get("description")
         if feedimage:
-            Gallery.objects.create(feedimage=feedimage, User=request.user,description=description)
+            Gallery.objects.create(feedimage=feedimage, User=request.user)
             return redirect("index")
     return render(request, "post.html")
 
@@ -94,7 +95,8 @@ def post(request):
 
 def logoutuser(request):
     logout(request)
-    return redirect('usersignin')  # Redirect to sign-in page after logout
+    request.session.flush()
+    return redirect('signin') 
 
 def delete_image(request,pk):
     feeds = Gallery.objects.filter(pk=pk)
@@ -104,8 +106,5 @@ def delete_image(request,pk):
 
 
 def image(request):
-  
     galleries = Gallery.objects.all()
-    
-    # Return the galleries to a template
     return render(request, "image.html", {"image": image})

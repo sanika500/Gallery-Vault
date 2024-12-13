@@ -9,8 +9,8 @@
    <div class="image">
         {% if feeds %}
         {% for i in feeds %}
-        <img src="{{i.feediamge.url}}" alt="gallery image">
-
+        <img src="{{i.feedimage.url}}" alt="gallery image">
+       
    </div> 
    <div>
     <a href="{% url 'delete_image' i.pk  %}">delete</a>
